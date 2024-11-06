@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Racing Game</title>
+    <style>
+        /* Basic styling for the game */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #333;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            color: #FFD700;
+        }
+
+        .track {
+            position: relative;
+            width: 80%;
+            height: 150px;
+            background-color: #222;
+            border: 2px solid #FFD700;
+            margin-top: 20px;
+        }
+
+        .finish-line {
+            position: absolute;
+            right: 0;
+            width: 10px;
+            height: 100%;
+            background-color: red;
+        }
+
+        /* Styling for Player 1 (Porsche) car */
+        .car {
+            position: absolute;
+            width: 210px;
+            height: 60px;
+            background-image: url('https://images-porsche.imgix.net/-/media/1DBDC37E82084CF496EE48FCCE48BE0A_4D115F6379CF4C299F1F38641CE865F0_911-gt3-side?');
+            background-size: cover;
+            top: 20px;
+        }
+
+        /* Styling for Player 2 (McLaren) car */
+        .car2 {
+            position: absolute;
+            width: 210px;
+            height: 60px;
+            background-image: url('https://s3-us-west-1.amazonaws.com/exr-static/upload/EXR_MCLAREN_570_GT4_CUTOUT.png');
+            background-size: cover;
+            top: 100px;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #FFD700;
+        }
+
+        #winner {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #32CD32;
+        }
+
+        /* Reset button styling */
+        #reset-btn {
+            background-color: #FFD700;
+            color: #333;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #reset-btn:hover {
+            background-color: #FFA500;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Racing Game</h1>
+
+    <div class="track">
+        <div class="finish-line"></div>
+        <div class="car" id="car1"></div>
+        <div class="car car2" id="car2"></div>
+    </div>
+
+    <div class="instructions">
+        Player 1 (Porsche): Press "A" to move<br>
+        Player 2 (McLaren): Press "L" to move
+    </div>
+
+    <div id="winner"></div>
+
+    <!-- Reset Button -->
+    <button id="reset-btn">Reset Game</button>
+
+    <script>
+        // Get elements
+        const car1 = document.getElementById("car1");
+        const car2 = document.getElementById("car2");
+        const finishLine = document.querySelector(".track").offsetWidth - car1.offsetWidth;
+        const winnerText = document.getElementById("winner");
+        const resetBtn = document.getElementById("reset-btn");
+
+        // Initial positions
+        let car1Position = 0;
+        let car2Position = 0;
+        let gameEnded = false;
+
+        const carSpeed = 30
+
+        // Key press event to move cars
+        document.addEventListener("keydown", (event) => {
+            if (gameEnded) return;
+
+            // Move car 1 on 'A' key
+            if (event.key === "a" || event.key === "A") {
+                car1Position += 10;
+                car1.style.left = car1Position + "px";
+                checkWinner("Player 1");
+            }
+
+            // Move car 2 on 'L' key
+            if (event.key === "l" || event.key === "L") {
+                car2Position += 10;
+                car2.style.left = car2Position + "px";
+                checkWinner("Player 2");
+            }
+        });
+
+        // Check if there's a winner
+        function checkWinner(player) {
+            if (car1Position >= finishLine) {
+                winnerText.textContent = "🏆 " + player + " (Porsche) Wins!";
+                gameEnded = true;
+            } else if (car2Position >= finishLine) {
+                winnerText.textContent = "🏆 " + player + " (McLaren) Wins!";
+                gameEnded = true;
+            }
+        }
+
+        // Reset the game
+        resetBtn.addEventListener("click", () => {
+            car1Position = 0;
+            car2Position = 0;
+            car1.style.left = "0px";
+            car2.style.left = "0px";
+            winnerText.textContent = "";
+            gameEnded = false;
+        });
+    </script>
+
+</body>
+</html>
